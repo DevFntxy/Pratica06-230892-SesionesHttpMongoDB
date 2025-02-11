@@ -1,6 +1,9 @@
-import moment from 'moment-timezone';
 import { v4 as uuidv4 } from 'uuid';
 import { model, Schema } from "mongoose";
+import moment from 'moment-timezone';
+
+// Función para formatear las fechas al formato deseado
+const formatDate = (date) => moment(date).tz("America/Mexico_City").format('YYYY-MM-DD HH:mm:ss');
 
 const sessionsSchema = new Schema({
     sessionId: {
@@ -18,12 +21,12 @@ const sessionsSchema = new Schema({
     },
     createdAt: {
         type: Date,
-        default: () => moment().tz("America/Mexico_City").toDate(),
+        default: () => moment().tz("America/Mexico_City"),
         required: true
     },
     lastAccess: {
         type: Date,
-        default: () => moment().tz("America/Mexico_City").toDate()
+        default: () => moment().tz("America/Mexico_City")
     },
     status: {
         type: String,
@@ -70,5 +73,16 @@ const sessionsSchema = new Schema({
         }
     }
 });
+
+// Sobrescribimos el método toJSON para modificar la salida cuando se convierte el objeto a JSON
+sessionsSchema.methods.toJSON = function() {
+    const obj = this.toObject();
+    
+    // Convertimos las fechas a formato 'YYYY-MM-DD HH:mm:ss'
+    obj.createdAt = formatDate(obj.createdAt);
+    obj.lastAccess = formatDate(obj.lastAccess);
+    
+    return obj;
+};
 
 export default model("Session", sessionsSchema);

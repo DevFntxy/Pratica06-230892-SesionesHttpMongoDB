@@ -50,7 +50,7 @@ export const login = async (req, res) => {
             clientData: { ip: clientIP, macAddress },
             serverData: { ip: serverIP, macAddress: serverMac },
             inactivityTime: { hours: 0, minutes: 0, seconds: 0 },
-            lastAccess: moment().tz('America/Mexico_City').toDate()
+            lastAccess: moment().tz('America/Mexico_City').format('YYYY-MM-DD HH:mm:ss')
         };
 
         const session = await createSession(sessionData);
@@ -100,7 +100,7 @@ export const updateSession = async (req, res) => {
         const updateData = {
             ...(email && { email }),
             ...(nickname && { nickname }),
-            lastAccess: moment().tz('America/Mexico_City').toDate(),
+            lastAccess: moment().tz('America/Mexico_City').format('YYYY-MM-DD HH:mm:ss'),
             status: "Activa",
             inactivityTime: { hours: 0, minutes: 0, seconds: 0 }
         };
@@ -129,7 +129,7 @@ export const logout = async (req, res) => {
 
         const updateData = {
             status: "Finalizada por el usuario",
-            lastAccess: moment().tz('America/Mexico_City').toDate()
+            lastAccess: moment().tz('America/Mexico_City').format('YYYY-MM-DD HH:mm:ss')
         };
 
         const updatedSession = await updateSessionById(sessionId, updateData);
@@ -175,6 +175,7 @@ export const getAllActiveSessions = async (req, res) => {
         return res.status(500).json({ message: "Error al obtener las sesiones activas", error });
     }
 };
+
 // DELETE: Eliminar todas las sesiones
 export const deleteSessions = async (req, res) => {
     try {
