@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "Realizar un ejemplo de aplicacion web basada en TechStack de NodeJs, Esto ya de una forma mas realista al conectar a una base de datos",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "nodemon app.js"
   },
   "author": "Derek Sesni Carreño",
   "license": "ISC",

@@ -1,39 +1,36 @@
-// Importaciones necesarias
 import express from 'express';
-import cors from 'cors';
-import session from 'express-session';
+import sessionRoutes from './src/routes/sessionsRoutes.js';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+import os from 'os';
+import "./database.js"
 
-// Importación de rutas
-import sessionRoutes from './routes/sessionRoutes.js';
-
-// Configuración de variables de entorno
 const app = express();
-const PORT = process.env.PORT || 3500;
+const PORT = 3500;
 
-// Configuración de middleware
-app.use(cors({
-    origin: ['http://localhost:3500', 'http://localhost:192.168.27.55'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-}));
+
+
+// Obtener información del servidor
+const getServerNetworkInfo = () => {
+    const interfaces = os.networkInterfaces();
+    for (const name in interfaces) {
+        for (const iface of interfaces[name]) {
+            if (iface.family === 'IPv4' && !iface.internal) {
+                return { ip: iface.address, mac: iface.mac };
+            }
+        }
+    }
+};
+
+const { ip, mac } = getServerNetworkInfo();
+app.locals.serverIP = ip;
+app.locals.serverMac = mac;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(session({
-    secret: 'p4-DSC#XUGABOX-controldesesiones',
-    resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 5 * 60 * 1000 },
-}));
-
 // Rutas
-app.use('/api/sessions', sessionRoutes);
+app.use('/apiSesni', sessionRoutes);
 
-// Inicio del servidor
 app.listen(PORT, () => {
-    console.log(`Servidor iniciado en http://localhost:${PORT}`);
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
