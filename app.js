@@ -3,7 +3,7 @@ import sessionRoutes from './src/routes/sessionsRoutes.js';
 import mongoose from 'mongoose';
 import os from 'os';
 import "./database.js"
-
+import cors from "cors"
 const app = express();
 const PORT = 3500;
 
@@ -20,6 +20,13 @@ const getServerNetworkInfo = () => {
         }
     }
 };
+
+
+app.use(cors({
+    origin: '*', // Permite cualquier origen
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+    allowedHeaders: ['Content-Type', 'Authorization'] // Cabeceras permitidas
+}));
 
 const { ip, mac } = getServerNetworkInfo();
 app.locals.serverIP = ip;

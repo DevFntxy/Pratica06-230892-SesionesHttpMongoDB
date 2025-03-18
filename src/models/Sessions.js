@@ -71,7 +71,27 @@ const sessionsSchema = new Schema({
             min: 0,
             max: 59
         }
-    }
+    },
+    durationTime: {
+        hours: {
+            type: Number,
+            required: true,
+            min: 0
+        },
+        minutes: {
+            type: Number,
+            required: true,
+            min: 0,
+            max: 59
+        },
+        seconds: {
+            type: Number,
+            required: true,
+            min: 0,
+            max: 59
+        }
+    },
+
 });
 
 // Sobrescribimos el método toJSON para modificar la salida cuando se convierte el objeto a JSON
